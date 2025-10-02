@@ -20,6 +20,7 @@
 #include "main.h"
 
 #include "buzzer.h"
+#include "led_manager.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -71,31 +72,23 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void leds_off(void) {
-	HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
-}
-
-void startup_sequence(void) {
-	leds_off();
-
+static void run_startup_sequence(void) {
 	// 1. Czerwona dioda + buzzer
-	HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);
+	led_on(LED_ID_RED);
 	buzzer_beep(30);
-	HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
+	led_off(LED_ID_RED);
 	HAL_Delay(30);
 
 	// 2. Niebieska dioda + buzzer
-	HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET);
+	led_on(LED_ID_BLUE);
 	buzzer_beep(30);
-	HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
+	led_off(LED_ID_BLUE);
 	HAL_Delay(30);
 
 	// 3. Zielona dioda + buzzer
-	HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+	led_on(LED_ID_GREEN);
 	buzzer_beep(30);
-	HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+	led_off(LED_ID_GREEN);
 }
 
 /* USER CODE END 0 */
@@ -137,16 +130,16 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  // Inicjalizacja modułów
+  leds_init();
+
   // Uruchomienie PWM dla buzzera
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
 
   // Sekwencja startowa
-  startup_sequence();
+  run_startup_sequence();
 
   /* USER CODE END 2 */
-
-  /* Initialize leds */
-  BSP_LED_Init(LED_GREEN);
 
   /* Initialize USER push-button, will be used to trigger an interrupt each time it's pressed.*/
   BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
