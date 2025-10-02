@@ -22,6 +22,8 @@
 #include "buzzer.h"
 #include "led_manager.h"
 #include "buttons.h"
+#include "encoder.h"
+#include "ui_feedback.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -134,6 +136,7 @@ int main(void)
   // Inicjalizacja modułów
   leds_init();
   buttons_init();
+  encoder_init();
 
   // Uruchomienie PWM dla buzzera
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
@@ -162,11 +165,29 @@ int main(void)
   while (1)
   {
     buttons_process();
-
-    if (button_is_pressed(BUTTON_ID_USER)) {
-        led_toggle(LED_ID_NUCLEO_GREEN);
+ 
+    bool action_detected = false;
+ 
+    int16_t enc_change = encoder_get_change();
+    if (enc_change != 0) {
+        action_detected = true;
+        // Tutaj logika obsługi enkodera, np. zmiana wartości w menu
     }
-
+ 
+    // Sprawdzenie wszystkich przycisków
+    for (button_id_t i = 0; i < BUTTON_ID_COUNT; i++) {
+        if (button_is_pressed(i)) {
+            action_detected = true;
+            // Tutaj logika dla konkretnego przycisku, np.
+            if (i == BUTTON_ID_USER) {
+                led_toggle(LED_ID_NUCLEO_GREEN);
+            }
+        }
+    }
+ 
+    if (action_detected) {
+        ui_feedback_signal_action();
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
