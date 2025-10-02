@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32h5xx_it.h"
+#include "buttons.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -206,7 +207,7 @@ void EXTI2_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI2_IRQn 0 */
 
-  /* USER CODE END EXTI2_IRQn 0 */
+  buttons_irq_callback(ENC_BTN_Pin);
   HAL_GPIO_EXTI_IRQHandler(ENC_BTN_Pin);
   /* USER CODE BEGIN EXTI2_IRQn 1 */
 
@@ -220,7 +221,7 @@ void EXTI4_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI4_IRQn 0 */
 
-  /* USER CODE END EXTI4_IRQn 0 */
+  buttons_irq_callback(TEST_BTN_Pin);
   HAL_GPIO_EXTI_IRQHandler(TEST_BTN_Pin);
   /* USER CODE BEGIN EXTI4_IRQn 1 */
 
@@ -234,7 +235,7 @@ void EXTI13_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI13_IRQn 0 */
 
-  /* USER CODE END EXTI13_IRQn 0 */
+  buttons_irq_callback(BUTTON_USER_PIN);
   BSP_PB_IRQHandler(BUTTON_USER);
   /* USER CODE BEGIN EXTI13_IRQn 1 */
 

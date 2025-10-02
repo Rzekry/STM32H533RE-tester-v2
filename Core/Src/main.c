@@ -21,6 +21,7 @@
 
 #include "buzzer.h"
 #include "led_manager.h"
+#include "buttons.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -132,6 +133,7 @@ int main(void)
 
   // Inicjalizacja modułów
   leds_init();
+  buttons_init();
 
   // Uruchomienie PWM dla buzzera
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
@@ -159,6 +161,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    buttons_process();
+
+    if (button_is_pressed(BUTTON_ID_USER)) {
+        led_toggle(LED_ID_NUCLEO_GREEN);
+    }
 
     /* USER CODE END WHILE */
 

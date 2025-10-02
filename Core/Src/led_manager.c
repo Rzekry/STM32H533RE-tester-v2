@@ -48,3 +48,9 @@ void led_off(led_id_t led_id) {
         HAL_GPIO_WritePin(leds[led_id].port, leds[led_id].pin, leds[led_id].off_state);
     }
 }
+
+void led_toggle(led_id_t led_id) {
+    if (led_id < LED_ID_COUNT) {
+        HAL_GPIO_TogglePin(leds[led_id].port, leds[led_id].pin);
+    }
+}

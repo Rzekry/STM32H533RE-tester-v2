@@ -37,4 +37,10 @@ void led_on(led_id_t led_id);
  */
 void led_off(led_id_t led_id);
 
+/**
+ * @brief Przełącza stan określonej diody LED.
+ * @param led_id Identyfikator diody z enum led_id_t.
+ */
+void led_toggle(led_id_t led_id);
+
 #endif /* INC_LED_MANAGER_H_ */
