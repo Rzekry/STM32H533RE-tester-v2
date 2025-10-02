@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "buttons.h"
 
 /* USER CODE END Includes */
 
@@ -535,6 +536,18 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
+{
+  // Forward interrupt notification to the button module
+  buttons_irq_callback(GPIO_Pin);
+}
+
+void BSP_PB_Callback(Button_TypeDef Button)
+{
+  if (Button == BUTTON_USER) {
+    buttons_irq_callback(BUTTON_USER_PIN);
+  }
+}
 
 /* USER CODE END 4 */
 
