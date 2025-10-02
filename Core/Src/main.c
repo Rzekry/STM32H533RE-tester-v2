@@ -70,6 +70,46 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void buzzer_on(void) {
+	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 500); // 50% wypełnienia
+}
+
+void buzzer_off(void) {
+	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 0); // 0% wypełnienia
+}
+
+void leds_off(void) {
+	HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+}
+
+void startup_sequence(void) {
+	leds_off();
+
+	// 1. Czerwona dioda + buzzer
+	HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);
+	buzzer_on();
+	HAL_Delay(30);
+	buzzer_off();
+	HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
+	HAL_Delay(30);
+
+	// 2. Niebieska dioda + buzzer
+	HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET);
+	buzzer_on();
+	HAL_Delay(30);
+	buzzer_off();
+	HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
+	HAL_Delay(30);
+
+	// 3. Zielona dioda + buzzer
+	HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+	buzzer_on();
+	HAL_Delay(30);
+	buzzer_off();
+	HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+}
 
 /* USER CODE END 0 */
 
@@ -109,6 +149,12 @@ int main(void)
   MX_SPI3_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  // Uruchomienie PWM dla buzzera
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+
+  // Sekwencja startowa
+  startup_sequence();
 
   /* USER CODE END 2 */
 

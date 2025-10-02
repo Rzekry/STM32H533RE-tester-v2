@@ -58,6 +58,10 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
+void buzzer_on(void);
+void buzzer_off(void);
+void leds_off(void);
+void startup_sequence(void);
 
 /* USER CODE END EFP */
 
