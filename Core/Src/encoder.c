@@ -13,6 +13,13 @@ extern TIM_HandleTypeDef htim2;
 // Zmienna przechowująca ostatnią odczytaną wartość licznika enkodera
 static uint16_t last_counter_value = 0;
 
+// Liczba impulsów licznika przypadająca na jeden krok (ząbek) enkodera.
+// W trybie TIM_ENCODERMODE_TI1 timer zlicza dwa impulsy na pełny krok.
+#define ENCODER_COUNTS_PER_STEP 2
+
+// Akumulacja impulsów pozwala zgłaszać wyłącznie pełne kroki enkodera.
+static int32_t accumulated_counts = 0;
+
 void encoder_init(void) {
     // Uruchomienie timera w trybie enkodera na wszystkich kanałach
     HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
@@ -24,6 +31,7 @@ void encoder_init(void) {
     __HAL_TIM_SET_COUNTER(&htim2, middle_value);
 
     last_counter_value = middle_value;
+    accumulated_counts = 0;
 }
 
 int16_t encoder_get_change(void) {
@@ -35,11 +43,10 @@ int16_t encoder_get_change(void) {
     // Zapisz aktualną wartość jako ostatnią
     last_counter_value = current_counter;
 
-    // W trybie TIM_ENCODERMODE_TI1, jeden "ząbek" (krok) enkodera powoduje zmianę licznika o 1.
-    // Dzielenie przez 2 (diff / 2) powodowało, że pojedyncze kroki były ignorowane (1 / 2 = 0).
-    // Zwracamy surową różnicę, aby wykryć każdy ruch.
-    // Jeśli w przyszłości zmienisz tryb enkodera na TIM_ENCODERMODE_TI12 (który zlicza 4 impulsy na ząbek),
-    // możesz rozważyć dzielenie wyniku przez 4, aby uzyskać liczbę pełnych "ząbków".
+    // Akumuluj impulsy i zwróć pełne kroki (np. jeden zwrot = 1).
+    accumulated_counts += diff;
+    int16_t step_change = (int16_t)(accumulated_counts / ENCODER_COUNTS_PER_STEP);
+    accumulated_counts -= (int32_t)step_change * ENCODER_COUNTS_PER_STEP;
 
-    return diff;
+    return step_change;
 }

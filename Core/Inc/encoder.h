@@ -18,13 +18,12 @@ void encoder_init(void);
 /**
  * @brief Odczytuje zmianę pozycji enkodera od ostatniego wywołania.
  *
- * @note Zwraca liczbę "kroków" enkodera. W zależności od konfiguracji
- *       i typu enkodera, jeden "ząbek" może odpowiadać 2 lub 4 krokom.
- *       Np. jeśli funkcja zwróci 4, oznacza to obrót o jeden ząbek w prawo.
- *       Jeśli zwróci -4, oznacza to obrót o jeden ząbek w lewo.
+ * @note Funkcja akumuluje impulsy z licznika timera i zwraca wyłącznie
+ *       pełne kroki (ząbki) enkodera. Dodatni wynik oznacza obrót w prawo,
+ *       ujemny w lewo.
  *
- * @return int16_t Zmiana pozycji (dodatnia dla obrotu w prawo, ujemna dla obrotu w lewo).
- */
+ * @return int16_t Zmiana pozycji (w krokach) od ostatniego wywołania.
+*/
 int16_t encoder_get_change(void);
 
 
