@@ -18,14 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
-#include "buzzer.h"
-#include "led_manager.h"
-#include "buttons.h"
-#include "encoder.h"
-#include "ui_feedback.h"
-#include "startup_sequence.h"
-#include "logger.h"
+#include "app.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -116,17 +109,8 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  // Inicjalizacja modułów
-  leds_init();
-  buttons_init();
-  logger_init();
-  encoder_init();
-
-  // Uruchomienie PWM dla buzzera
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-
-  // Sekwencja startowa
-  startup_sequence_start();
+  // Inicjalizacja warstwy aplikacji
+  app_init();
 
   /* USER CODE END 2 */
 
@@ -144,44 +128,12 @@ int main(void)
     Error_Handler();
   }
 
-  // Wyślij testową wiadomość przez UART
-  log_info("MAIN", "System zainicjowany. Hello World!");
-
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // Przetwarzaj sekwencję startową, dopóki się nie zakończy
-    if (startup_sequence_process()) {
-        continue; // Pomiń resztę pętli, dopóki trwa sekwencja
-    }
-
-    buttons_process();
-    ui_feedback_process();
- 
-    bool action_detected = false;
- 
-    int16_t enc_change = encoder_get_change();
-    if (enc_change != 0) {
-        action_detected = true;
-        // Tutaj logika obsługi enkodera, np. zmiana wartości w menu
-    }
- 
-    // Sprawdzenie wszystkich przycisków
-    for (button_id_t i = 0; i < BUTTON_ID_COUNT; i++) {
-        if (button_is_pressed(i)) {
-            action_detected = true;
-            // Tutaj logika dla konkretnego przycisku, np.
-            if (i == BUTTON_ID_USER) {
-                led_toggle(LED_ID_NUCLEO_GREEN);
-            }
-        }
-    }
- 
-    if (action_detected) {
-        ui_feedback_signal_action();
-    }
-
+    // Główna pętla aplikacji
+    app_process();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
