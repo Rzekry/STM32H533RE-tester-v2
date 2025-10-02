@@ -21,7 +21,8 @@ static const led_config_t leds[LED_ID_COUNT] = {
     [LED_ID_RED]          = {LED_RED_GPIO_Port,   LED_RED_Pin,   GPIO_PIN_RESET, GPIO_PIN_SET},
     [LED_ID_BLUE]         = {LED_BLUE_GPIO_Port,  LED_BLUE_Pin,  GPIO_PIN_RESET, GPIO_PIN_SET},
     [LED_ID_GREEN]        = {LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET, GPIO_PIN_SET},
-    [LED_ID_NUCLEO_GREEN] = {LED2_GPIO_PORT,      LED2_PIN,      GPIO_PIN_SET,   GPIO_PIN_RESET} // Dioda na Nucleo ma odwrotną logikę
+    [LED_ID_NUCLEO_GREEN] = {LED2_GPIO_PORT,      LED2_PIN,      GPIO_PIN_SET,   GPIO_PIN_RESET}, // Dioda na Nucleo ma odwrotną logikę
+    [LED_ID_YELLOW]       = {LED_YELLOW_GPIO_Port,LED_YELLOW_Pin,GPIO_PIN_RESET, GPIO_PIN_SET}
 };
 
 void leds_init(void) {

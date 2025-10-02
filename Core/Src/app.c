@@ -15,6 +15,7 @@
 #include "ui_feedback.h"
 #include "startup_sequence.h"
 #include "logger.h"
+#include "breathing_led.h"
 
 // Deklaracja zewnętrznej zmiennej dla timera buzzera
 extern TIM_HandleTypeDef htim3;
@@ -25,6 +26,7 @@ void app_init(void) {
     buttons_init();
     logger_init();
     encoder_init();
+    breathing_led_init();
 
     // Uruchomienie PWM dla buzzera
     HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
@@ -42,6 +44,7 @@ void app_process(void) {
     // Cykliczne przetwarzanie modułów
     buttons_process();
     ui_feedback_process();
+    breathing_led_process();
 
     bool action_detected = false;
 

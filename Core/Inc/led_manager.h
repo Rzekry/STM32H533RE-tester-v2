@@ -16,6 +16,7 @@ typedef enum {
     LED_ID_BLUE,
     LED_ID_GREEN,
     LED_ID_NUCLEO_GREEN,
+    LED_ID_YELLOW,
     // Tutaj możesz dodać kolejne diody, np. LED_ID_ORANGE
     LED_ID_COUNT // Liczba wszystkich diod
 } led_id_t;

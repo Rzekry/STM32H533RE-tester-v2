@@ -80,6 +80,8 @@ void Error_Handler(void);
 #define LED_BLUE_GPIO_Port GPIOB
 #define LED_GREEN_Pin GPIO_PIN_15
 #define LED_GREEN_GPIO_Port GPIOB
+#define LED_YELLOW_Pin GPIO_PIN_7
+#define LED_YELLOW_GPIO_Port GPIOC
 #define SWDIO_Pin GPIO_PIN_13
 #define SWDIO_GPIO_Port GPIOA
 #define SWCLK_Pin GPIO_PIN_14
