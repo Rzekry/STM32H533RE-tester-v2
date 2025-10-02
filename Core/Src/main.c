@@ -170,6 +170,7 @@ int main(void)
   while (1)
   {
     buttons_process();
+    ui_feedback_process();
  
     bool action_detected = false;
  
@@ -193,6 +194,7 @@ int main(void)
     if (action_detected) {
         ui_feedback_signal_action();
     }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
