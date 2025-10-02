@@ -1,0 +1,22 @@
+# Build artifacts
+build/
+Debug/
+Release/
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.lst
+
+# STM32CubeIDE settings
+.settings/
+.project
+.cproject
+.mxproject
+
+# Other
+*.bak
+*.swp
+*~
