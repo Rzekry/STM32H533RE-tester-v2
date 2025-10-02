@@ -24,6 +24,7 @@
 #include "buttons.h"
 #include "encoder.h"
 #include "ui_feedback.h"
+#include "startup_sequence.h"
 #include "logger.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -76,25 +77,6 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-static void run_startup_sequence(void) {
-	// 1. Czerwona dioda + buzzer
-	led_on(LED_ID_RED);
-	buzzer_beep(30);
-	led_off(LED_ID_RED);
-	HAL_Delay(30);
-
-	// 2. Niebieska dioda + buzzer
-	led_on(LED_ID_BLUE);
-	buzzer_beep(30);
-	led_off(LED_ID_BLUE);
-	HAL_Delay(30);
-
-	// 3. Zielona dioda + buzzer
-	led_on(LED_ID_GREEN);
-	buzzer_beep(30);
-	led_off(LED_ID_GREEN);
-}
-
 /* USER CODE END 0 */
 
 /**
@@ -144,7 +126,7 @@ int main(void)
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
 
   // Sekwencja startowa
-  run_startup_sequence();
+  startup_sequence_start();
 
   /* USER CODE END 2 */
 
@@ -169,6 +151,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    // Przetwarzaj sekwencję startową, dopóki się nie zakończy
+    if (startup_sequence_process()) {
+        continue; // Pomiń resztę pętli, dopóki trwa sekwencja
+    }
+
     buttons_process();
     ui_feedback_process();
  
