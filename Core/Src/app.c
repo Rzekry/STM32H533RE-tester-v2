@@ -16,12 +16,18 @@
 #include "startup_sequence.h"
 #include "logger.h"
 
+// Deklaracja zewnętrznej zmiennej dla timera buzzera
+extern TIM_HandleTypeDef htim3;
+
 void app_init(void) {
     // Inicjalizacja modułów, które są częścią logiki aplikacji
     leds_init();
     buttons_init();
     logger_init();
     encoder_init();
+
+    // Uruchomienie PWM dla buzzera
+    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
 
     // Uruchomienie sekwencji startowej
     startup_sequence_start();
