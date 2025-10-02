@@ -24,6 +24,7 @@
 #include "buttons.h"
 #include "encoder.h"
 #include "ui_feedback.h"
+#include "logger.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -136,6 +137,7 @@ int main(void)
   // Inicjalizacja modułów
   leds_init();
   buttons_init();
+  logger_init();
   encoder_init();
 
   // Uruchomienie PWM dla buzzera
@@ -161,7 +163,7 @@ int main(void)
   }
 
   // Wyślij testową wiadomość przez UART
-  printf("Hello World! Logi dzialaja.\r\n");
+  log_info("MAIN", "System zainicjowany. Hello World!");
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */

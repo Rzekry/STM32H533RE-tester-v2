@@ -35,12 +35,11 @@ int16_t encoder_get_change(void) {
     // Zapisz aktualną wartość jako ostatnią
     last_counter_value = current_counter;
 
-    // Enkoder w trybie TIM_ENCODERMODE_TI1 zlicza co drugi krok (2 impulsy na ząbek).
-    // Aby uzyskać liczbę pełnych "ząbków", można podzielić wynik przez 2.
-    // Jednak zwracanie surowej zmiany daje większą elastyczność.
-    // W Twojej konfiguracji (TI1), jeden "ząbek" to zmiana o 2 lub -2.
-    // Aby to ujednolicić, dzielimy przez 2.
-    // Jeśli zauważysz, że enkoder jest zbyt czuły lub niedokładny, zmień dzielnik na 1 lub 4.
+    // W trybie TIM_ENCODERMODE_TI1, jeden "ząbek" (krok) enkodera powoduje zmianę licznika o 1.
+    // Dzielenie przez 2 (diff / 2) powodowało, że pojedyncze kroki były ignorowane (1 / 2 = 0).
+    // Zwracamy surową różnicę, aby wykryć każdy ruch.
+    // Jeśli w przyszłości zmienisz tryb enkodera na TIM_ENCODERMODE_TI12 (który zlicza 4 impulsy na ząbek),
+    // możesz rozważyć dzielenie wyniku przez 4, aby uzyskać liczbę pełnych "ząbków".
 
-    return diff / 2;
+    return diff;
 }
