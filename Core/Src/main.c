@@ -160,6 +160,9 @@ int main(void)
     Error_Handler();
   }
 
+  // Wyślij testową wiadomość przez UART
+  printf("Hello World! Logi dzialaja.\r\n");
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
